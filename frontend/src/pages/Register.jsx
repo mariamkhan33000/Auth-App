@@ -1,16 +1,33 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import axios from 'axios'
+import { toast } from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 const Register = () => {
+    const navigate = useNavigate()
     const [data, setData] = useState({
         name : '',
         email : '',
-        password : ''
+        password : '',
     })
 
-    const registerUser = (e) => {
+    const registerUser = async (e) => {
         e.preventDefault()
-
+        const {name, email, password} = data
+        try {
+            const {data} = await axios.post('/register', {
+                name, email, password
+            })
+            if(data.error){
+                toast.error(data.error)
+            }else
+            setData({})
+            toast.success("Login Successfull. Wellcome")
+            navigate('/login')
+        } catch (error) {
+            console.log(error)
+        }
     }
   return (
     <div className="w-screen h-screen bg-slate-500 flex justify-center items-center text-white">
@@ -26,7 +43,7 @@ const Register = () => {
                 </div>
                 <div>
                 <label className="font-bold text-xl text-green-300">Password</label>
-                <input className="mt-2 bg-transparent border-2 outline-none border-green-200 w-full rounded-full px-2 py-1 " type="password" placeholder="Enter Your Password..." value={data.password} onChange={(e) => setData({...data, password: e.target.password})}/>
+                <input className="mt-2 bg-transparent border-2 outline-none border-green-200 w-full rounded-full px-2 py-1 " type="password" placeholder="Enter Your Password..." value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/>
                 </div>
                 <div className="flex justify-center items-center mt-5 mb-3 w-full border-2 border-green-200 rounded-full bg-green-500 cursor-pointer hover:bg-green-700">
                     <button className="text-xl font-semibold" type="submit">Submit</button>
