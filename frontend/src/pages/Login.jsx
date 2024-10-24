@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import axios from 'axios';
 
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
 
     const loginUser = (e) => {
         e.preventDefault()
+        axios.get('/')
     }
   return (
     <div className="w-screen h-screen bg-slate-500 flex justify-center items-center text-white">
