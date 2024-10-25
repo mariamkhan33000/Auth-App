@@ -1,4 +1,5 @@
 const userModel = require("../models/user")
+const {hashPassword, comparePassword} = require('../helper/authPassword')
 
 const registerUser = async (req, res) => {
     try {
@@ -13,8 +14,9 @@ const registerUser = async (req, res) => {
         if(existing) {
             return res.status(404).json({error: "User alread exisit"})
         }
+        const hashedPassword = await hashPassword(password)
         
-        const user = await userModel.create({name, email, password})
+        const user = await userModel.create({name, email, password: hashedPassword})
         res.status(200).send({error: "successfully submit", user})
     } catch (error) {
         console.log(error)
